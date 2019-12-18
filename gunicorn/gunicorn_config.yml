@@ -1,6 +1,15 @@
 ---
 - hosts: httpd
   tasks:
+    - name: install nginx for gunicorn
+      yum:
+        name: nginx
+        state: latest
+    - name: start nginx
+      service:
+        name: httpd
+        state: started
+        enabled: true
     - name: install required package for gunicorn
       yum:
         name: python
@@ -8,4 +17,4 @@
     - name: install python-gunicorn
       yum:
         name: python-gunicorn
-        state: latest   
+        state: latest
