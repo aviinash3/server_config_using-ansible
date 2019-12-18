@@ -1,0 +1,12 @@
+[all]
+itversity-pvt00.com ansible_user=admin
+itversity-pvt01.com ansible_user=admin
+
+
+[master]
+itversity-pvt00.com ansible_user=admin
+
+
+[client]
+itversity-pvt01.com ansible_user=admin
+

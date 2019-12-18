@@ -1,0 +1,109 @@
+---
+
+- hosts: httpd
+  tasks:
+    - name: start firewall
+      service:
+        name: firewalld
+        state: started
+        enabled: true
+
+    - name: set timezone
+      shell: timedatectl set-timezone Asia/Kolkata
+
+    - name: Install NTP
+      yum:
+        name: ntp
+        state: latest
+    - name: start ntp
+      service:
+        name: ntpd
+        state: started
+        enabled: true
+
+    - name: Copy over the NTP configuration
+      template: src=/home/avinash/itversity/task2/work/ntp_data/server_ntp.conf dest=/etc/ntp.conf
+
+    - name: restart ntpd
+      service:
+        name: ntpd
+        state: restarted
+        enabled: true
+
+
+    - name: allow ntp through firewall
+      firewalld:
+        service: ntp
+        state: enabled
+        permanent: yes 
+
+    - name: firewall reload
+      service:
+        name: firewalld
+        state: reloaded
+
+- hosts: mysql_db
+  tasks:
+    - name: start firewall
+      service:
+        name: firewalld
+        state: started
+        enabled: true
+
+    - name: set timezone
+      shell: timedatectl set-timezone Asia/Kolkata
+
+    - name: Install NTP
+      yum:
+        name: ntp
+        state: present
+
+    - name: start ntp
+      service:
+        name: ntpd
+        state: started
+        enabled: true
+
+    - name: allow ntp through firewall
+      firewalld: 
+        service: ntp
+        state: enabled
+        permanent: yes
+
+    - name: firewall reload
+      service: 
+        name: firewalld
+        state: reloaded
+
+    - name: Copy over the NTP configuration
+      template: src=/home/avinash/itversity/task2//work/ntp_data/slave/client_ntp.conf dest=/etc/ntp.conf
+
+    - name: restart ntpd
+      service:
+        name: ntpd
+        state: restarted
+
+    - name: Make sure NTP is stopped
+      service:
+        name: ntpd
+        state: stopped
+        enabled: true
+
+    - name: Sync time initialy
+      shell: ntpdate 192.168.10.210
+
+
+    - name: Make sure NTP is started up
+      service:
+        name: ntpd
+        state: restarted
+        enabled: true
+
+    - name: Sync hwclock
+      shell: hwclock -w
+     
+    - name: restart ntpd
+      service:
+        name: ntpd
+        state: restarted
+        enabled: true

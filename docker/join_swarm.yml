@@ -1,0 +1,18 @@
+--- 
+- hosts: node1
+  tasks:
+    - name: Add nodes to the swarm cluster
+      docker_swarm:
+        state: join
+        advertise_addr: 192.168.10.211
+        join_token: SWMTKN-1-1urj7ku0iv6c4tyle0wgjgvcuy4wsg00pdrea1z6af9plw71y7-62kii6o3rh1bqosqkafgvh3t6
+        remote_addrs: [ '192.168.10.210:2377' ]
+- hosts: node2
+  tasks:
+    - name: Add nodes to the swarm cluster
+      docker_swarm:
+        state: join
+        advertise_addr: 192.168.10.212
+        join_token: SWMTKN-1-1urj7ku0iv6c4tyle0wgjgvcuy4wsg00pdrea1z6af9plw71y7-62kii6o3rh1bqosqkafgvh3t6
+        remote_addrs: [ '192.168.10.210:2377' ]
+

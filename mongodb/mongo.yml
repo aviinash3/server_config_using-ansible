@@ -1,0 +1,42 @@
+---
+- hosts: httpd
+  tasks:
+    - name: create repo for mongo db
+      template: src=/home/avinash/itversity/task2/work/repo_data/mongodb.repo dest=/etc/yum.repos.d/mongodb-org-4.2.repo
+
+    - name: install mongodb
+      yum:
+        name: mongodb-org*
+        state: latest
+    - name: Install pymongo
+      yum:
+        name: python-devel,gcc
+        state: latest
+    - name: start firewall
+      service:
+        name: firewalld
+        state: started
+        enabled: true
+    - name: add service mongodb to firewall
+      firewalld:
+        service: mongodb
+        state: enabled
+        permanent: yes
+    - name: firewall reload
+      service:
+        name: firewalld
+        state: reloaded
+
+    - name: start the service mongodb
+      service: 
+        name: mongod
+        state: started
+        enabled: true
+        #    - name: create user for mongo db
+        # mongodb_user:
+        # database: test
+        #name: admin
+        #password: 123admin
+        #login_host: 192.168.10.210
+        #login_port: 27017
+        #state: present

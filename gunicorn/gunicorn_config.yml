@@ -1,0 +1,11 @@
+---
+- hosts: httpd
+  tasks:
+    - name: install required package for gunicorn
+      yum:
+        name: python
+        state: latest
+    - name: install python-gunicorn
+      yum:
+        name: python-gunicorn
+        state: latest   

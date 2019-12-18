@@ -1,0 +1,8 @@
+---
+- hosts: httpd
+  tasks:
+    - name: swarm init on master node
+      docker_swarm:
+        advertise_addr: 192.168.10.210
+        state: present
+

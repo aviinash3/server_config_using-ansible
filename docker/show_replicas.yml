@@ -1,0 +1,12 @@
+---
+- hosts: httpd
+  tasks: 
+    - name: check replicas
+      command: docker service ls
+    
+    - name: check service
+      command: docker service ps admin
+
+    - name: check service for admin 1
+      command: docker service ps admin1
+    

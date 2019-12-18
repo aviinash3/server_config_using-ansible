@@ -1,0 +1,17 @@
+---
+- hosts: httpd
+  tasks:
+    - name: create 3 replica for swarm
+      command: docker service create --replicas 3 -p 81:81 --name admin1 nginx
+
+    - name: create 3 replica for swarm
+      command: docker service create --replicas 3 -p 80:80 --name admin nginx
+
+    - name: check replicas
+      command: docker service ls
+    - name: check replicas
+      command: 
+        - docker service ps admin
+        - docker service ps admin1
+
+

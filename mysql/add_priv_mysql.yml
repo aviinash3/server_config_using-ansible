@@ -1,0 +1,10 @@
+---
+- hosts: all
+  tasks:
+    - name: apply role on db
+      postgresql_privs:    
+        db: db_abc
+        privs: SELECT,INSERT,UPDATE
+        role: admin,postgres
+        grant_option: yes
+

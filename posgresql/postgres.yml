@@ -1,0 +1,62 @@
+---
+- hosts: psql_db
+  tasks:
+    - name: install postgresql repo
+      yum:
+        name: https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm
+        state: present
+
+    - name: install postgresql version 12
+      yum:
+        name: postgresql12-server
+        state: latest
+
+    - name: install postgresql-contrib version 12
+      yum:
+        name: postgresql12-contrib
+        state: latest
+
+    - name: install pg_repack version 12
+      yum:
+        name: pg_repack12
+        state: latest
+    - name: create data cluster
+      command:  /usr/pgsql-12/bin/postgresql-12-setup initdb 
+
+    - name: install prerequisites
+      yum: 
+        name: python-psycopg2 
+        state: latest
+
+    - name: start service postgresql
+      service:
+        name: postgresql-12
+        state: started
+        enabled: true
+
+    - name: create a new database in postgresql
+      become_user: postgres
+      postgresql_db:
+        name: db_abc
+    - name: create user for postgresql db
+      become_user: postgres
+      postgresql_user:
+        name: admin
+        db: postgres
+        role_attr_flags: CREATEDB,SUPERUSER,CREATEROLE,REPLICATION
+
+    - name: apply role on db
+      become_user: postgres
+      postgresql_privs:
+        db: db_abc
+        privs: ALL
+        type: database
+        role: admin,postgres
+        grant_option: yes
+
+
+
+
+
+
+

@@ -1,0 +1,21 @@
+---
+- hosts: psql_db
+  tasks:
+    - name: install yum utils
+      yum:
+        name: yum-utils
+        state: present
+    - name: copy nginx.repo data  to  /etc/yum.repos.d/
+      copy:
+        src: /home/avinash/itversity/task2/work/repo_data/
+        dest: /etc/yum.repos.d/
+
+    - name: install nginx
+      yum:
+        name: nginx
+        state: latest
+    - name: start nginx service
+      service:
+        name: nginx
+        state: started
+        enabled: true

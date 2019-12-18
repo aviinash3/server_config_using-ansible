@@ -1,0 +1,25 @@
+[all]
+itversity-pvt00.com ansible_user=admin
+itversity-pvt01.com ansible_user=admin
+itversity-pvt02.com ansible_user=admin
+
+
+[httpd]
+itversity-pvt00.com ansible_user=admin
+
+
+[mysql_db]
+itversity-pvt01.com ansible_user=admin
+
+[psql_db]
+itversity-pvt02.com ansible_user=admin
+
+#[db]
+#itversity-pvt01.com ansible_user=admin
+#itversity-pvt02.com ansible_user=admin
+
+[node1]
+itversity-pvt01.com ansible_user=admin
+
+[node2]
+itversity-pvt02.com ansible_user=admin

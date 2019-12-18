@@ -1,0 +1,26 @@
+---
+- hosts: all
+  tasks: 
+    - name: install docker required package.
+      yum:
+        name: yum-utils,device-mapper-persistent-data,lvm2 
+        state: latest
+
+    - name: download docker repo 
+      command: yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+
+    - name: install docker
+      yum:
+        name: docker-ce
+        state: latest
+    - name: install docker-python for docker
+      yum:
+        name: docker-python
+        state: latest
+    - name: start the service docker
+      service:
+        name: docker
+        state: started
+        enabled: true 
+        #    - name: check servie is running 
+        # command:  systemctl status docker
