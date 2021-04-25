@@ -1,0 +1,18 @@
+---
+- name: create a docker compose directory for each project
+  file:
+    path: "/home/{{ansible_user}}/{{organisation_name}}"
+    state: directory
+
+- name: copy Docker Compose files and env file
+  template:
+    src: "{{item.src}}"
+    dest: "{{item.dest}}"
+  with_items:
+    - { src: 'docker_compose.yml.j2', dest: "/home/{{ansible_user}}/{{ organisation_name }}/docker-compose.yml"}
+    - { src: 'db.env', dest: "/home/{{ansible_user}}/{{ organisation_name }}/db.env" }
+    
+#- name: deploy Docker Compose stack
+#  command: WA_API_VERSION=2.33.4 docker-compose up -d
+#  args:
+#    chdir: /home/{{ansible_user}}/{{ organisation_name }}/

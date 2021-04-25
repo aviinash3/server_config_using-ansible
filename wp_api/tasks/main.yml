@@ -1,0 +1,11 @@
+---
+# tasks file for wp_api
+- name: getting all Vasriables
+  include_vars: ../../group_vars.yml
+  ignore_errors: true
+
+- name: setup organisation using docker compose
+  import_tasks: docker_compose.yml
+
+#- name: setting ou new domain
+#  import_tasks: setup_domain.yml 

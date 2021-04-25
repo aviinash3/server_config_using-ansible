@@ -1,0 +1,56 @@
+ServerAdmin webmaster@abc.com
+    ServerName "{{domain_prefix}}"."{{domain_name}}"
+
+    # SuexecUserGroup: Sets the domain to run as a specific user when
+    # executing processes.
+    # SuexecUserGroup USER GROUP
+
+    # DocumentRoot: The directory out of which you will serve your
+    # documents. By default, all requests are taken from this directory, but
+    # symbolic links and aliases may be used to point to other locations.
+    DocumentRoot /var/www/domains/"{{domain_name}}"/"{{domain_prefix}}"/htdocs
+
+    # If not specified, the global error log is used
+    ErrorLog /var/www/domains/"{{domain_name}}"/"{{domain_prefix}}"/logs/error_log
+    CustomLog /var/www/domains/"{{domain_name}}"/"{{domain_prefix}}"/logs/access_log combined
+    # cronolog monthly file, year directory
+
+    # Do not lose time with IP address lookups
+    HostnameLookups Off
+
+    # Needed for named virtual hosts
+    UseCanonicalName Off
+
+ProxyRequests Off
+ProxyPreserveHost On 
+SSLProxyEngine On
+RewriteEngine on
+
+# Configures the footer on server-generated documents
+    ServerSignature On
+
+
+    <Directory /var/www/domains/"{{domain_name}}"/"{{domain_prefix}}"/htdocs>
+         Options ExecCGI FollowSymLinks
+        AllowOverride All
+	Require all granted
+    </Directory>
+
+
+RewriteEngine On
+RewriteCond %{HTTPS} off
+RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI}
+
+
+
+
+
+ProxyTimeout 900
+ProxyPass /robots.txt !
+ProxyPass / http://localhost:"{{web_port}}"/
+ProxyPassReverse / http://localhost:"{{web_port}}"/
+
+    DirectoryIndex index.jsp default.jsp index.html
+
+    ErrorDocument 502 "This site is currently undergoing maintenance.  We apologize for the inconvenience."
+    ErrorDocument 503 "This site is currently undergoing maintenance.  We apologize for the inconvenience."

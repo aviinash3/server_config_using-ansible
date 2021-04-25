@@ -1,0 +1,8 @@
+---
+# tasks file for docker- name: getting all Vasriables
+- name: getting all variables
+  include_vars: ../../group_vars.yml
+  ignore_errors: true
+
+#- import_tasks: install_docker.yml
+- import_tasks: install_docker-compose.yml

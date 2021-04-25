@@ -1,0 +1,57 @@
+---
+- name: install apache
+  apt:
+    name: apache2
+    state: latest
+
+- name: setup proxy in apache 
+  command: a2enmod proxy proxy_http proxy_ajp rewrite headers ssl
+
+- name: create vhosts directory in apache config
+  file:
+    path: /etc/apache2/vhosts/includes
+    state: directory
+- name: config apache for proxy
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  with_items: 
+    - {src: 'apache2.conf', dest: '/etc/apache2/apache2.conf' }
+    - {src: 'ports.conf', dest: '/etc/apache2/ports.conf'}
+
+- name: setup apache for new domain for "{{domain_prefix}}.{{domain_name}}"
+  template:
+    src: "{{ item.src }}"
+    dest: "{{item.dest }}"
+  with_items:
+    - { src: 'abc.sample.com-ssl.conf.j2' , dest: "/etc/apache2/vhosts/{{domain_prefix}}.{{domain_name}}-ssl.conf" }
+    - { src: 'abc.sample.com.conf.j2' , dest: "/etc/apache2/vhosts/includes/{{domain_prefix}}.{{domain_name}}.conf" }
+  tags: setup_files
+
+- name: create logs and htdoc directory for "{{domain_prefix}}.{{domain_name}}"
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - "/var/www/domains/{{domain_name}}/{{domain_prefix}}/htdocs"
+    - "/var/www/domains/{{domain_name}}/{{domain_prefix}}/logs"
+
+
+-  name: create directory for ssl certificate
+   file:
+     path: "/var/www/domains/{{domain_name}}/ssl/"
+     state: directory
+
+- name: copy  ssl  ssl for "{{domain_name}}"
+  copy:
+    src: "{{item.src}}"
+    dest: "{{item.dest}}"
+  with_items:
+    - {src: "fullchain.pem", dest: "/var/www/domains/{{domain_name}}/ssl/fullchain.pem" }
+    - {src: "privkey.pem" , dest:  "/var/www/domains/{{domain_name}}/ssl/privkey.pem" }
+
+
+- name: restart apache
+  service:
+    name: apache2
+    state: restarted

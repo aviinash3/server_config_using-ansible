@@ -1,0 +1,16 @@
+---
+- name: setup apache for new domain for "{{domain_prefix}}.{{domain_postfix}}"
+  template:
+    src: "{{ item }}"
+    dest: "{{item }}"
+  with_items:
+    - { src: 'abc.sample.com-ssl.conf.j2' , dest: "/etc/apache2/vhosts/{{domain_prefix}}.{{domain_name}}-ssl.conf" }
+    - { src: 'whatsapp.sample.com.conf.j2' , dest: "/etc/apache2/vhosts/includes/{{domain_prefix}}.{{domain_name}}.conf" }
+
+- name: create logs and htdoc directory for "{{domain_prefix}}.{{domain_name}}"
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - '/var/www/domains/"{{domain_name}}"/"{{domain_prefix}}"/htdocs'
+    - '/var/www/domains/"{{domain_name}}"/"{{domain_prefix}}"/logs'

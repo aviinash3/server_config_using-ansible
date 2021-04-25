@@ -1,0 +1,4 @@
+---
+# vars file for apache
+#default application type is 'normal'
+#if you want to configure for application whatasapp api type 

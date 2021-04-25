@@ -1,0 +1,10 @@
+---
+
+- name: getting all Vasriables
+  include_vars: ../../group_vars.yml
+  ignore_errors: true
+  
+# tasks file for apache
+- name: install apache
+  import_tasks: install_apache.yml 
+
